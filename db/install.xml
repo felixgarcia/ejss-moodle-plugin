@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/ejsssimulation/db" VERSION="20181408" COMMENT="XMLDB file for Moodle mod/ejsssimulation"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="report_ejssviews" COMMENT="This table stores information about views statistics.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User id"/>
+        <FIELD NAME="contextinstanceid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course Module id"/>
+        <FIELD NAME="objecttable" TYPE="char" LENGTH="25" NOTNULL="true" SEQUENCE="false" COMMENT="This field stores the description of the resource."/>
+        <FIELD NAME="timestamp" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="This field stores the date of the view."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="Foreign key that references the user table"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="report_ejssuserdata" COMMENT="This table stores information about user data.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="viewid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="View id"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User id"/>
+        <FIELD NAME="info" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="This field stores the data of user."/>
+        <FIELD NAME="actions" TYPE="int" LENGTH="4" SEQUENCE="false" COMMENT="Amount of actions into the data of user."/>
+        <FIELD NAME="timestamp" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="This field stores the date of the user data."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="Foreign key that references the user table"/>
+      </KEYS>
+    </TABLE>
+	
+    <TABLE NAME="ejsssimulation" COMMENT="Each record is one ejss simulation and its config data">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="revision" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="incremented when after each file changes, solves browser caching issues"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+	
+  </TABLES>
+</XMLDB>
