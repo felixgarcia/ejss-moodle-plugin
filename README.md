@@ -9,10 +9,10 @@ The main features of this plugin are:
  
 ## Installation
 
-1- Install the plugin
-2- Allow users to create a web service token (Admin > Users > Permissions > Define roles)
-3- Enable web service advance feature (Admin > Advanced features)
-4- Enable REST protocol (Admin > Plugins > Web services > Manage protocols)
+- Install the plugin
+- Allow users to create a web service token (Admin > Users > Permissions > Define roles)
+- Enable web service advance feature (Admin > Advanced features)
+- Enable REST protocol (Admin > Plugins > Web services > Manage protocols)
 
 ## Acknowledgment
 
