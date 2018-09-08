@@ -69,63 +69,62 @@ if(!$sess->valid()) {
 	$ses = $sess->current();
 	$status = 'Online (' . userdate($ses->lastses, "%H:%M" . ')');
 
-	// Get last actions
+	// Get last views
 	$views = $DB->get_recordset_select(PLUGIN_VIEWS_TABLE_NAME, 'contextinstanceid = ' . $cmid . ' AND userid = ' . $userid . 
-		' AND timestamp >= UNIX_TIMESTAMP(CURDATE())', null, 'timestamp DESC', 'id, timestamp');
-	$count = 0;
-	$txtlines = 0;
-	foreach ($views as $view) {
+		' AND timestamp >= UNIX_TIMESTAMP(CURDATE()-1)', null, 'timestamp DESC', 'id, timestamp');
+	if($views->valid()) {
+		// Get last view
+		$view = $views->current();
+		$txtlines = 0;
+
+		// Get actions of last view
 		$inters = $DB->get_recordset(PLUGIN_USERDATA_TABLE_NAME, array('viewid'=>$view->id, 'userid'=>$userid), 'timestamp DESC');
-		$inter = $inters->current();
 		if(!$inters->valid()) {
 			$text = '-';
 		} else {
-			// get time of last action
-			$time = time() - $inter->timestamp;
-			if ($count == 0) {
-				$lastacttime = $time;
-			} else {
-				if($time < $lastacttime) $lastacttime = $time;
-			}
-			$count++;
-			
-			// Actions
-			$json = json_decode($inter->info);
-			$actions = $json->{'interactions'};
-			$events = $json->{'events'};
-			$model = $json->{'model'};
+			$lastacttime = time() - $inters->current()->timestamp;
+			foreach($inters as $inter) {				
+				// Actions
+				$json = json_decode($inter->info);
+				$actions = $json->{'interactions'};
+				$events = $json->{'events'};
+				$model = $json->{'model'};
 
-			foreach ($actions as $action) {
-				$ele = $action->{'element'};
-				if ($elementsel != 'Any' and $ele != $elementsel) continue;
-				$matchele = 1;
-				if (isset($action->{'property'})) {
-					$prop = $action->{'property'};
-					if ($txtlines < 4 and ($actionsel == 'Any' or $prop == $actionsel)) {
-						if ($format == 'simple')
-							$text = $text . html_writer::tag('p', $action->{'element'} . ':' . $action->{'property'} . '=' . json_encode($action->{'data'}));
-						else
-							$text = $text . html_writer::tag('p', 'Element: ' . $action->{'element'} . ' - Property: ' . $action->{'property'} . ' - Data: ' . json_encode($action->{'data'}));
-						$matchact = 1;
-						$txtlines++;
+				foreach ($actions as $action) {
+					$ele = $action->{'element'};
+					if ($elementsel != 'Any' and $ele != $elementsel) continue;
+					$matchele = 1;
+					if (isset($action->{'property'})) {
+						$prop = $action->{'property'};
+						if ($txtlines < 4 and ($actionsel == 'Any' or $prop == $actionsel)) {
+							if ($format == 'simple') {
+								$datastr = mod_ejsssimulation_cutstring(json_encode($action->{'data'}),30);
+								$text = $text . html_writer::tag('p', $action->{'element'} . ':' . $action->{'property'} . '=' . $datastr);
+							}
+							else
+								$text = $text . html_writer::tag('p', 'Element: ' . $action->{'element'} . ' - Property: ' . $action->{'property'} . ' - Data: ' . json_encode($action->{'data'}));
+							$matchact = 1;
+							$txtlines++;
+						}
 					}
-				}
-				if (isset($action->{'action'})) {
-					$act = $action->{'action'};
-					if ($txtlines < 4 and ($actionsel == 'Any' or $act == $actionsel)) {
-						if ($format == 'simple')
-							$text = $text . html_writer::tag('p', $action->{'element'} . ':' . $action->{'action'} );
-						else
-							$text = $text . html_writer::tag('p', 'Element: ' . $action->{'element'} . ' - Event: ' . $action->{'action'} );
-						$matchact = 1;
-						$txtlines++;
+					if (isset($action->{'action'})) {
+						$act = $action->{'action'};
+						if ($txtlines < 4 and ($actionsel == 'Any' or $act == $actionsel)) {
+							if ($format == 'simple')
+								$text = $text . html_writer::tag('p', $action->{'element'} . ':' . $action->{'action'} );
+							else
+								$text = $text . html_writer::tag('p', 'Element: ' . $action->{'element'} . ' - Event: ' . $action->{'action'} );
+							$matchact = 1;
+							$txtlines++;
+						}
 					}
-				}
-				$data = json_encode($action->{'data'});
-				if ($datasel == '' or (strpos($data, $datasel) !== false)) {
-					$matchdata = 1;
-				}
-			}		
+					$data = json_encode($action->{'data'});
+					if ($datasel == '' or (strpos($data, $datasel) !== false)) {
+						$matchdata = 1;
+					}
+				}		
+
+			}
 		}
 	}
 }

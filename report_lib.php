@@ -55,6 +55,13 @@ function mod_ejsssimulation_minutes($formated) {
 	return round($portions[0]/60 + $portions[1] + $portions[2]*60,2);
 }
 
+function mod_ejsssimulation_cutstring($str,$mxlen) {
+	if (strlen($str) > $mxlen) {
+		$str = substr($str, 0, $mxlen-3).'...';
+	}
+	return $str;
+}
+
 function mod_ejsssimulation_elements($cmid) {
 	$context = context_module::instance($cmid);
 

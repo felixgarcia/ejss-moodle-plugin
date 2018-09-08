@@ -253,7 +253,7 @@ if ($viewsel == 'table') { // Table View
 							// text
 							document.getElementById('st{$r->id}').innerHTML = data[3];
 							document.getElementById('act{$r->id}').innerHTML = data[4];
-							var action = data[5].substring(data[5].lastIndexOf('<p>')+3,data[5].lastIndexOf('</p>'));
+							var action = data[5].substring(data[5].indexOf('<p>')+3,data[5].indexOf('</p>'));
 							if (document.getElementById('text{$r->id}').innerHTML != action) {
 								if (!action || action == '')
 									document.getElementById('text{$r->id}').innerHTML = '<br>';

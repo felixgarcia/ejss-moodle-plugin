@@ -128,27 +128,31 @@ foreach ($views as $view) {
 }
 $views->close();	
 
-echo html_writer::start_tag('div', array('style'=>"width: 100%"));
-echo html_writer::start_tag('div', array('style'=>"float: left; width: 50%"));
-$chart = new \core\chart_bar();
-$chart->set_title('Actions in each view');
-$chart->add_series(new \core\chart_series('', array_column($table->data,3)));
-$chart->set_labels(array_column($table->data,0));
-echo $OUTPUT->render($chart,false);
-echo html_writer::end_tag('div');
-echo html_writer::start_tag('div', array('style'=>"float: left; width: 50%"));
-$chart = new \core\chart_bar();
-$chart->set_title('Minutes of each view');
-$seconds = [];
-foreach(array_column($table->data,2) as $formated)
-	$seconds[] = mod_ejsssimulation_minutes($formated);
-$chart->add_series(new \core\chart_series('', $seconds));
-$chart->set_labels(array_column($table->data,0));
-echo $OUTPUT->render($chart,false);
-echo html_writer::end_tag('div');
-echo html_writer::end_tag('div');
+if (count($table->data) > 0) { 
+	echo html_writer::start_tag('div', array('style'=>"width: 100%"));
+	echo html_writer::start_tag('div', array('style'=>"float: left; width: 50%"));
+	$chart = new \core\chart_bar();
+	$chart->set_title('Actions in each view');
+	$chart->add_series(new \core\chart_series('', array_column($table->data,3)));
+	$chart->set_labels(array_column($table->data,0));
+	echo $OUTPUT->render($chart,false);
+	echo html_writer::end_tag('div');
+	echo html_writer::start_tag('div', array('style'=>"float: left; width: 50%"));
+	$chart = new \core\chart_bar();
+	$chart->set_title('Minutes of each view');
+	$seconds = [];
+	foreach(array_column($table->data,2) as $formated)
+		$seconds[] = mod_ejsssimulation_minutes($formated);
+	$chart->add_series(new \core\chart_series('', $seconds));
+	$chart->set_labels(array_column($table->data,0));
+	echo $OUTPUT->render($chart,false);
+	echo html_writer::end_tag('div');
+	echo html_writer::end_tag('div');
 
-echo html_writer::table($table);	
+	echo html_writer::table($table);	
+} else {
+	echo html_writer::tag('span', 'No data');	
+}
 
 // Back link
 $url = new moodle_url($CFG->wwwroot . '/mod/ejsssimulation/report_history.php?active_type='.$active_type.'&title='.urlencode($title).'&cm=' . $cmid . '&cminstance=' . $cminstance . '&course=' . $courseid);
