@@ -16,8 +16,7 @@ The main features of this plugin are:
 
 ## Acknowledgment
 
-This research is made possible by the eduLab project AEP 01/18 LW Virtual Lab Learning Analytics-Moodle extension, awarded by the Prime Minister Office, National Research Foundation (NRF), Singapore in collaboration with National
-Institute of Education (NIE), Singapore and the Ministry of Education (MOE), Singapore.
+This research is made possible by the eduLab project AEP 01/18 LW Virtual Lab Learning Analytics-Moodle extension, awarded by the Ministry of Education (MOE), Singapore, in collaboration with National Institute of Education (NIE), Singapore.
 
 ## Contact
 
